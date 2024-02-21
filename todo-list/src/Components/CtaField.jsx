@@ -8,7 +8,7 @@ import { useContext, useState, useEffect } from "react";
 
 export default function CtaField() {
   useEffect(() => {
-    const getSavedTasks = JSON.parse(localStorage.getItem("task") ?? []);
+    const getSavedTasks = JSON.parse(localStorage.getItem("task")) ?? [];
     setTasksData(getSavedTasks);
   }, []);
   const { tasksData, setTasksData } = useContext(TasksContext);
