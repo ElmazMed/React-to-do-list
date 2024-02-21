@@ -25,6 +25,7 @@ body {
   padding: .1rem .4rem;
   border-Radius: .5rem;
   margin-Bottom: 1rem;
+  margin-inline: .3rem;
 }
 .linkstyle {
   text-decoration: none;

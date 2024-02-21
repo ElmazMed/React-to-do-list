@@ -9,6 +9,8 @@ import {
   DialogTitle,
   IconButton,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import { TasksContext } from "./TasksContext";
 import { useContext, useState } from "react";
@@ -16,11 +18,23 @@ export default function Tasks() {
   const { tasksData, setTasksData } = useContext(TasksContext);
   const [editedTask, setEditedTask] = useState("");
   const [open, setOpen] = useState(false);
+  const [filtredTasks, setFiltredTasks] = useState("all");
 
   const handleClose = () => {
     setOpen(false);
   };
-  const tasksList = tasksData.map((task) => {
+
+  let tasksCompletion = tasksData;
+  const unCompletedTasks = tasksData.filter((t) => !t.isDone);
+
+  const completedTasks = tasksData.filter((t) => t.isDone);
+
+  if (filtredTasks == "completed") {
+    tasksCompletion = completedTasks;
+  } else if (filtredTasks == "uncompleted") {
+    tasksCompletion = unCompletedTasks;
+  }
+  const tasksList = tasksCompletion.map((task) => {
     function handleSubmitBtn() {
       const updateTask = tasksData.map((t) => {
         if (t.id === task.id) {
@@ -30,6 +44,7 @@ export default function Tasks() {
         }
       });
       setTasksData(updateTask);
+      localStorage.setItem("task", JSON.stringify(updateTask));
       handleClose();
     }
     return (
@@ -40,6 +55,7 @@ export default function Tasks() {
           backgroundColor: task.isDone
             ? "#00eb003b"
             : "rgba(245, 245, 220, 0.378)",
+          textDecoration: task.isDone ? "line-through" : "none",
         }}
       >
         <Dialog open={open} onClose={handleClose}>
@@ -92,6 +108,7 @@ export default function Tasks() {
                 return t;
               });
               setTasksData(checkIsDone);
+              localStorage.setItem("task", JSON.stringify(checkIsDone));
             }}
           >
             <DoneIcon />
@@ -107,6 +124,7 @@ export default function Tasks() {
               });
 
               setTasksData(deleteTask);
+              localStorage.setItem("task", JSON.stringify(deleteTask));
             }}
           >
             <DeleteIcon />
@@ -115,5 +133,22 @@ export default function Tasks() {
       </div>
     );
   });
-  return <>{tasksList}</>;
+  return (
+    <>
+      <div style={{ margin: "1rem" }}>
+        <ToggleButtonGroup
+          value={filtredTasks}
+          exclusive
+          onChange={(e) => {
+            setFiltredTasks(e.target.value);
+          }}
+        >
+          <ToggleButton value="all">ALL</ToggleButton>
+          <ToggleButton value="completed">COMPLETED</ToggleButton>
+          <ToggleButton value="uncompleted">UNCOMPLETED</ToggleButton>
+        </ToggleButtonGroup>
+      </div>
+      {tasksList}
+    </>
+  );
 }
