@@ -2,12 +2,13 @@ import DoneIcon from "@mui/icons-material/Done";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { TasksContext } from "./TasksContext";
-import { SnackContext } from "./SnackContext";
+import { useTasks } from "./TasksContext";
+import { useSnack } from "./SnackContext";
 import { useContext, useState, useMemo } from "react";
+
 export default function Tasks({ openDialog }) {
-  const { tasksData, setTasksData } = useContext(TasksContext);
-  const { handleShowHide, setSnackMsg } = useContext(SnackContext);
+  const { tasksData, setTasksData } = useTasks();
+  const { handleShowHide, setSnackMsg } = useSnack();
   const [filtredTasks, setFiltredTasks] = useState("all");
 
   let tasksCompletion = tasksData;

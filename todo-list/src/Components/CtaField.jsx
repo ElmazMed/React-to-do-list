@@ -10,8 +10,8 @@ import {
 import Stack from "@mui/material/Stack";
 import Tasks from "./Tasks";
 import { v4 as uuidv4 } from "uuid";
-import { TasksContext } from "./TasksContext";
-import { SnackContext } from "./SnackContext";
+import { useTasks } from "./TasksContext";
+import { useSnack } from "./SnackContext";
 import { useContext, useState, useEffect } from "react";
 
 export default function CtaField() {
@@ -19,8 +19,8 @@ export default function CtaField() {
     const getSavedTasks = JSON.parse(localStorage.getItem("task")) ?? [];
     setTasksData(getSavedTasks);
   }, []);
-  const { tasksData, setTasksData } = useContext(TasksContext);
-  const { handleShowHide, setSnackMsg } = useContext(SnackContext);
+  const { tasksData, setTasksData } = useTasks();
+  const { handleShowHide, setSnackMsg } = useSnack();
   const [taskInput, setTaskInput] = useState("");
   const [editedTask, setEditedTask] = useState("");
   const [open, setOpen] = useState(false);
